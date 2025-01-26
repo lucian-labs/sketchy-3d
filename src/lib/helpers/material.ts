@@ -5,6 +5,8 @@ import {
   ShaderMaterial,
 } from 'three'
 
+export { MeshBasicMaterial, MeshStandardMaterial, ShaderMaterial } from 'three'
+
 export const useBasicMaterial = (color: number | string = 0xffffff) => {
   return new MeshBasicMaterial({
     color,

@@ -1,6 +1,6 @@
 {
   "name": "@dank-inc/sketchy-3d",
-  "version": "0.999.0",
+  "version": "0.9999.0",
   "author": "Elijah Lucian",
   "description": "A lightweight wrapper around three.js for creative coders",
   "repository": {

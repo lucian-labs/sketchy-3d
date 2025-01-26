@@ -1,6 +1,8 @@
 import { BoxGeometry, CircleGeometry, SphereGeometry } from 'three'
 import { Vec3 } from '../types/common'
 
+export { BoxGeometry, CircleGeometry, SphereGeometry } from 'three'
+
 export type GeoType = 'sphere-buffer' | 'box'
 
 export const useBox = (size: Vec3) => {
