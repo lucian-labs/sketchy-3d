@@ -9,6 +9,7 @@ import {
   start3dSketch,
   useOrthographicCamera,
   OrthographicCameraBounds,
+  useText,
 } from '../src/lib'
 
 import { SuperMouse } from '@dank-inc/super-mouse'
@@ -32,7 +33,7 @@ const sketch = create3dSketch(
 
     const box = useMesh(useBox([3, 3, 3]), useStandardMaterial(0xffff00))
     box.position.set(0, 0, 0)
-    box.rotation.y = TAU * 0.05
+    box.rotation.x = TAU * 0.125
     scene.add(box)
 
     light.lookAt(box.position)
