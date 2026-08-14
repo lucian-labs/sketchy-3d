@@ -1,8 +1,8 @@
 # Sketchy3D
 
-[![npm version](https://badge.fury.io/js/@dank-inc%2Fsketchy-3d.svg)](https://badge.fury.io/js/@dank-inc%2Fsketchy-3d)
+**[Live demo →](https://sketchy-3d.lucianlabs.ca)** · [npm](https://www.npmjs.com/package/@dank-inc/sketchy-3d) · [all packages](https://lucianlabs.ca/packages/)
 
-[live demo](https://sketchy-3d.elijahlucian.ca/)
+[![npm version](https://badge.fury.io/js/@dank-inc%2Fsketchy-3d.svg)](https://badge.fury.io/js/@dank-inc%2Fsketchy-3d)
 
 A threejs typescript wrapper built around @dank-inc/sketchy!
 
