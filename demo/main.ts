@@ -25,7 +25,10 @@ import {
 import type { Sketch, Sketchy3DParams } from '@dank-inc/sketchy-3d'
 import * as THREE from 'three'
 
-declare const waveloop: { ready: (...tags: string[]) => Promise<unknown> }
+declare const waveloop: {
+  ready: (...tags: string[]) => Promise<unknown>
+  whenSized: (el: Element, fn: (rect: DOMRect) => void) => () => void
+}
 
 const app = document.getElementById('app') as HTMLElement
 
@@ -237,8 +240,12 @@ function stageSection() {
     state.wire = (e as CustomEvent<{ value: boolean }>).detail.value
   })
 
-  requestAnimationFrame(() => {
-    const box = hud.getBoundingClientRect()
+  // start3dSketch has no cancel, so this must run exactly once — whenSized
+  // fires on every resize, hence the latch.
+  let started = false
+  waveloop.whenSized(hud, (box) => {
+    if (started) return
+    started = true
     const params: Sketchy3DParams = createParams({
       element: stage,
       animate: true,
