@@ -1,12 +1,9 @@
 /* sketchy-3d demo — https://sketchy-3d.lucianlabs.ca
  *
- * Two behaviours of the published library shape this page:
- *
- *  - params.t is hardwired to () => 0, so the elapsed clock comes from
- *    params.time (which start3dSketch does advance) rather than t().
- *  - start3dSketch's animate loop has no cancel and never reads
- *    params.animated, so switching sketches must reuse ONE scene rather than
- *    starting a second loop. Both are recorded in the review.
+ * One createParams call, one frame loop: each createParams builds a WebGL
+ * context, and browsers cap those at ~8-16 per page, so the controls write
+ * into a state object the frame function reads instead of rebuilding the
+ * sketch. start3dSketch now returns a stop function, kept here for teardown.
  */
 
 import {
@@ -184,8 +181,8 @@ function stageSection() {
       'p',
       'wl-muted',
       'One scene, one frame loop. The controls write into an object the frame ' +
-        'function reads each tick — the sketch is never reloaded, because ' +
-        'start3dSketch has no cancel path.'
+        'function reads each tick — rebuilding the sketch would mean a second ' +
+        'WebGL context, and the browser only grants a handful.'
     )
   )
 
@@ -240,12 +237,11 @@ function stageSection() {
     state.wire = (e as CustomEvent<{ value: boolean }>).detail.value
   })
 
-  // start3dSketch has no cancel, so this must run exactly once — whenSized
-  // fires on every resize, hence the latch.
-  let started = false
+  // whenSized fires on every resize; one context per page is the budget, so
+  // latch the first call and keep the returned stop for teardown.
+  let stop: (() => void) | null = null
   waveloop.whenSized(hud, (box) => {
-    if (started) return
-    started = true
+    if (stop) return
     const params: Sketchy3DParams = createParams({
       element: stage,
       animate: true,
@@ -256,7 +252,8 @@ function stageSection() {
     hud.setAttribute('tr', `${Math.round(box.width)}×${Math.round(box.height)}`)
     hud.setAttribute('bl', 'THREE.JS · WEBGL')
     hud.setAttribute('br', 'SPIN 0.50')
-    start3dSketch(sketch, params)
+    stop = start3dSketch(sketch, params)
+    window.addEventListener('pagehide', () => stop?.())
   })
 }
 
@@ -293,7 +290,7 @@ function apiSection() {
   ;(api as HTMLElement & { rows: unknown }).rows = [
     { name: 'createParams', kind: 'function', signature: '(config: Sketchy3DConfig) => Sketchy3DParams', about: 'Builds scene, camera, renderer and clock, and mounts the canvas. Adds background: [color, alpha] on top of sketchy SketchConfig.' },
     { name: 'create3dSketch', kind: 'function', signature: '(sketch: Sketch) => Sketch', about: 'Identity helper for param typing.' },
-    { name: 'start3dSketch', kind: 'function', signature: '(sketch: Sketch, params: Sketchy3DParams) => void', about: 'Runs the sketch and drives requestAnimationFrame. See the review note on cancellation.' },
+    { name: 'start3dSketch', kind: 'function', signature: '(sketch: Sketch, params: Sketchy3DParams) => () => void', about: 'Runs the sketch and drives requestAnimationFrame. Returns a stop function; pass animate: false for a single frame.' },
     { name: 'params.scene / camera / renderer / clock', kind: 'property', signature: 'THREE.*', about: 'The real three.js objects.' },
     { name: 'params.time / dt', kind: 'property', signature: 'number', about: 'Seconds since start, and the last frame delta.' },
     { name: 'useBox / useSphere / useCircle', kind: 'function', signature: '(dims) => BufferGeometry', about: 'Geometry constructors.' },
@@ -301,7 +298,7 @@ function apiSection() {
     { name: 'useMesh / useShaderMesh', kind: 'function', signature: '(geo, material) => Mesh', about: 'Mesh constructors.' },
     { name: 'useLight / useAmbient', kind: 'function', signature: '(color, intensity) => Light', about: 'Directional and ambient lights.' },
     { name: 'useCamera', kind: 'function', signature: "('perspective' | 'ortho', ratio) => Camera", about: 'Camera constructor.' },
-    { name: 'useText', kind: 'function', signature: '(phrase, { size }) => Promise<…>', about: 'Async text geometry.' },
-    { name: 'tosha / dehash / dehash2d / dehash3d', kind: 'function', signature: 'various', about: 'Hash helpers for deterministic placement.' },
+    { name: 'useText', kind: 'function', signature: '(phrase, { size, font? }) => Promise<…>', about: 'Async text geometry. Needs a .typeface.json font you host, or a preloaded Font.' },
+    { name: 'v3', kind: 'function', signature: '(vec3 | x, y?, z?) => THREE.Vector3', about: 'Vector3 from a tuple, three numbers, or nothing.' },
   ]
 }

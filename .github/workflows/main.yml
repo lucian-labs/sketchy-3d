@@ -1,9 +1,30 @@
 on:
   push:
     branches: [main]
+    # Publishing is gated on a version tag - pushing to main only verifies.
+    tags: ['v*']
 
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 22.x
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run lint:demo
+      - run: npm test
+      - run: npm run clean && npm run compile
+      - run: npm run demo:build
+
   deploy:
+    needs: verify
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +35,8 @@ jobs:
           node-version: 22.x
           registry-url: 'https://registry.npmjs.org'
 
-      - run: npm i
+      - run: npm ci
+      # prepublishOnly runs lint + clean + compile, so lib/ can never be stale.
       - run: npm run deploy
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

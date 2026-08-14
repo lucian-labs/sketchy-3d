@@ -2,11 +2,11 @@ import { Vector3 } from 'three'
 import {
   create3dSketch,
   useAmbient,
+  useBox,
   useLight,
   useShader,
   useShaderMesh,
-} from '@/lib'
-import { useBox } from '@/lib/helpers/geometry'
+} from '@dank-inc/sketchy-3d'
 
 export default create3dSketch(({ scene, camera, renderer }) => {
   scene.add(useAmbient())
@@ -39,6 +39,7 @@ export default create3dSketch(({ scene, camera, renderer }) => {
 const vert = `
 varying vec2 vUv;
 void main() {
+  vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position.xyz, 1.0);
 }
 `

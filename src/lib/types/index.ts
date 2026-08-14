@@ -1,6 +1,12 @@
 import { SketchConfig } from '@dank-inc/sketchy'
-import { Lerpr, Scaler, SinCosFn } from '@dank-inc/sketchy/lib/maff'
-import { Camera, Clock, Renderer, Scene } from 'three'
+import { Lerpr, Scaler, SinCosFn } from '@dank-inc/sketchy/lib/maff.js'
+import {
+  Clock,
+  OrthographicCamera,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+} from 'three'
 
 export type Frame = (params: Sketchy3DParams) => void
 export type Sketch = (params: Sketchy3DParams) => Frame
@@ -12,7 +18,7 @@ export type Sketchy3DConfig = SketchConfig & {
 export type Sketchy3DParams = {
   // Context
   container: HTMLElement
-  context: WebGLRenderingContext
+  context: WebGLRenderingContext | WebGL2RenderingContext
   width: number
   height: number
   animated: boolean
@@ -30,9 +36,11 @@ export type Sketchy3DParams = {
 
   // THREE
   scene: Scene
-  camera: Camera
+  // Concrete types, so .aspect / .setPixelRatio / .shadowMap are reachable
+  // without a cast - Camera and Renderer are near-empty base types.
+  camera: PerspectiveCamera | OrthographicCamera
   // composer: EffectsComposer;
-  renderer: Renderer
+  renderer: WebGLRenderer
   clock: Clock
 
   // helporz

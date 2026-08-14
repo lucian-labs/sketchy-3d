@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": "..",
+    // Mirrors the alias in vite.demo.config.ts: the demo consumes the library
+    // by its published name, resolved to the working tree.
+    "paths": { "@dank-inc/sketchy-3d": ["src/lib/index.ts"] }
+  },
+  "include": ["**/*.ts"]
+}

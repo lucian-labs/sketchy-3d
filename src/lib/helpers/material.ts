@@ -24,7 +24,9 @@ type Uniform = [key: string, value: number | Color]
 
 const mapUniforms = (uniforms?: Uniform[]) => {
   if (!uniforms) return
-  const result: Record<string, { value: number | Color | string }> = {}
+  // Null prototype: a caller-supplied '__proto__' key would otherwise hit
+  // Object.prototype's setter instead of registering a uniform.
+  const result: Record<string, { value: number | Color }> = Object.create(null)
   for (const [key, value] of uniforms) {
     result[key] = { value }
   }

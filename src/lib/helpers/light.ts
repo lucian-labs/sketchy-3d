@@ -1,5 +1,5 @@
 import { AmbientLight, DirectionalLight } from 'three'
-import { Vec3 } from '../types/common'
+import { Vec3 } from '../types/common.js'
 
 export const useLight = (
   color: string | number = '#fff',

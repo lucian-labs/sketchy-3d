@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { Vec3 } from "../types/common";
+import { Vec3 } from "../types/common.js";
 
 // maybe too smart
 export const v3 = (v3?: Vec3 | number, y?: number, z?: number) => {
