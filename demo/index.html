@@ -1,44 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💕</text></svg>"
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>sketchy-3d — @dank-inc/sketchy-3d</title>
+    <meta
+      name="description"
+      content="Interactive demo of @dank-inc/sketchy-3d — the sketchy frame model over three.js, with use* helpers for cameras, geometry, materials and lights."
     />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Sketchy-3d demo</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="https://ds.lucianlabs.ca/waveloop.css" />
+    <script type="module" src="https://ds.lucianlabs.ca/waveloop.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="index.ts"></script>
-    <div id="dank-inc-demo-panel" data-color="#e313e3">
-      <div class="header">
-        <h1>@dank-inc/sketchy-3d</h1>
-        <div class="controls">
-          <input type="checkbox" id="hidden" />
-          <label for="hidden">hide panel</label>
-        </div>
-      </div>
-      <div class="content"></div>
-      <div class="footer">
-        <p>
-          <a target="_blank" href="https://github.com/dank-inc/sketchy-3d"
-            >GitHub</a
-          >
-        </p>
-      </div>
-    </div>
-    <script>
-      const hidden = document.getElementById('hidden')
-
-      const panel = document.getElementById('dank-inc-demo-panel')
-      panel.style.setProperty('--color', panel.dataset.color)
-
-      hidden.addEventListener('change', (e) => {
-        panel.classList.toggle('hidden', e.target.checked)
-      })
-    </script>
+    <wl-demo
+      sub="sketchy-3d"
+      wordmark="sketchy 3d"
+      version="0.9999.0"
+      accent="violet"
+      tagline="The sketchy frame model over three.js. Same sketch-returns-frame shape, with use* helpers for cameras, geometry, materials and lights."
+    >
+      <div id="app"></div>
+    </wl-demo>
+    <script type="module" src="./main.ts"></script>
   </body>
 </html>

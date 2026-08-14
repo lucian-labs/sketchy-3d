@@ -3,3 +3,5 @@
 /.parcel-cache
 /lib
 /build
+node_modules
+demo/dist
